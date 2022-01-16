@@ -1,0 +1,21 @@
+---
+- name: Check if k3s file exists
+  stat:
+    path: /usr/local/bin/k3s
+  register: k3s_st
+
+- name: Check k3s version
+  command: 'k3s -v | awk "{ print $3 }"'
+  register: k3s_ver
+  when: k3s_st.stat.isreg is defined and k3s_st.stat.isreg
+
+- name: Download k3s binary arm64
+  get_url:
+    url: "https://github.com/rancher/k3s/releases/download/{{ k3s_version }}/k3s-arm64"
+    checksum: "sha256:https://github.com/k3s-io/k3s/releases/download/{{ k3s_version }}/sha256sum-arm64.txt"
+    dest: /usr/local/bin/k3s
+    owner: root
+    group: root
+    mode: 0755
+
+  when: k3s_st.stat.exists == False or k3s_ver.stdout.split() != hostvars[inventory_hostname].k3s_version

@@ -1,0 +1,12 @@
+---
+- name: Restart systemd-timesyncd
+  systemd:
+      name: systemd-timesyncd
+      state: restarted
+      enabled: true
+
+- name: Enable tmp.mount
+  systemd:
+      name: tmp.mount
+      enabled: true
+      daemon_reload: true

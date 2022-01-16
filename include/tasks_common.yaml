@@ -1,0 +1,31 @@
+---
+- meta: flush_handlers
+- name: Check provisioned file
+  stat:
+    path: "/provisioned"
+  register: st_provision
+
+- name: Configure motd
+  block:
+    - name: Create motd
+      command: figlet "{{ ansible_hostname }}"
+      register: motd
+
+    - name: Save motd
+      copy:
+        dest: "/etc/motd"
+        mode: "0644"
+        content: "{{ motd.stdout }}"
+  when: st_provision.stat.exists == False
+
+- name: Reboot system after provisioned
+  reboot:
+  when: st_provision.stat.exists == False
+
+- name: Create provisioned file
+  file:
+    path: "/provisioned"
+    state: touch
+    mode: "0400"
+  when: st_provision.stat.exists == False
+

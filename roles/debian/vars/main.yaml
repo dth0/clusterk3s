@@ -1,0 +1,31 @@
+---
+main_packages:
+  - bash-completion
+  - curl
+  - ethtool
+  - dnsutils
+  - whois
+  - htop
+  - iotop
+  - irqbalance
+  - nmap
+  - rsync
+  - sudo
+  - jq
+  - wget
+  - sysstat
+  - tuned
+  - tuned-utils
+  - openssh-server
+  - sysfsutils
+  - figlet
+  - iptables
+  - locales-all
+  - nfs-common
+  - vim-nox
+
+deprecated_packages:
+  - vim-tiny
+  - nano
+  - avahi-daemon
+  - wpasupplicant 

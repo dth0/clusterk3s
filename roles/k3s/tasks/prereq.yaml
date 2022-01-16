@@ -1,0 +1,38 @@
+---
+- name: Enable IPv4 forwarding
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: "1"
+    state: present
+    reload: yes
+
+- name: Enable IPv6 forwarding
+  sysctl:
+    name: net.ipv6.conf.all.forwarding
+    value: "1"
+    state: present
+    reload: yes
+
+- name: Activating cgroup support
+  copy:
+    dest: /etc/default/raspi-extra-cmdline
+    content:
+      cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory
+    mode: 0644
+
+- name: Create cmdline.txt symlink
+  file:
+    src: /boot/firmware/cmdline.txt
+    dest: /boot/cmdline.txt
+    state: link
+
+- name: Changing to iptables-legacy
+  alternatives:
+    path: /usr/sbin/iptables-legacy
+    name: iptables
+
+- name: Changing to ip6tables-legacy
+  alternatives:
+    path: /usr/sbin/ip6tables-legacy
+    name: ip6tables
+

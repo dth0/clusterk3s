@@ -1,0 +1,20 @@
+---
+- hosts: all
+
+  pre_tasks:
+    - name: include pre_tasks file
+      import_tasks: ./include/pre_tasks.yaml
+
+  roles:
+    - name: debian
+      tags: [debian]
+    - name: k3s
+      tags: [k3s]
+
+  tasks:
+    - name: Include common tasks
+      import_tasks: ./include/tasks_common.yaml
+
+  handlers:
+    - name: Reload setup
+      setup:

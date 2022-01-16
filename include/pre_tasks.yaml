@@ -1,0 +1,64 @@
+---    
+- name: Make sure we are running Debian
+  fail:
+    msg: "Sorry, only debian is supported"
+  when: ansible_os_family != 'Debian'
+
+- name: Install Custom Facts
+  block:
+    - name: Create facts directory
+      file:
+        path: "/etc/ansible/facts.d"
+        recurse: yes
+        state: "directory"
+
+    - name: Install facts
+      copy:
+        src: "{{ item }}"
+        dest: "/etc/ansible/facts.d/"
+        mode: "0755"
+      with_fileglob: "facts/*"
+ 
+- name: Install Required packages
+  apt:
+    name: 
+      - "sudo"
+      - "python3-apt"
+      - "python-is-python3"
+    state: present
+    cache_valid_time: 3600
+
+- name: Update hosts file
+  lineinfile:
+    dest: /etc/hosts
+    line: "{{ hostvars[item].ansible_host }} {{ item }}.{{ domain }}  {{ item }}"
+    regexp: '.*{{ item }}$'
+  with_items: "{{ groups.all }}"
+
+- name: Update host name
+  hostname:
+    name: "{{ inventory_hostname }}"
+
+- name: Setup admin account
+  block:
+    - name: Configure admin User
+      user:
+        name: "{{ ansible_user }}"
+        comment: Admin User
+        password: "{{ default_pass }}"
+        groups: sudo
+        append: yes
+        shell: /bin/bash
+
+    - name: Set authorized key taken from file
+      authorized_key:
+        user: "{{ ansible_user }}"
+        state: present
+        key: "{{ lookup('file', './raspberry.pub') }}"
+
+    - name: enable sudo
+      copy:
+        dest: /etc/sudoers.d/groups
+        content: "%sudo ALL=(ALL) NOPASSWD: ALL"
+        mode: 0600
+

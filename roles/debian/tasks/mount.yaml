@@ -1,0 +1,8 @@
+---
+- name: Setup tmp.mount service
+  copy:
+    src: /usr/share/systemd/tmp.mount
+    dest: /etc/systemd/system/tmp.mount
+    remote_src: true
+    mode: 0644
+  notify: Enable tmp.mount

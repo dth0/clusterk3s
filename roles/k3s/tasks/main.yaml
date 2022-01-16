@@ -1,0 +1,9 @@
+---
+- import_tasks: prereq.yaml
+- import_tasks: install.yaml
+
+- import_tasks: master.yaml
+  when: k3s_master is defined and k3s_master
+ 
+- import_tasks: nodes.yaml
+  when: k3s_master is not defined or k3s_master == False

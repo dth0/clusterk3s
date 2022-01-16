@@ -1,0 +1,10 @@
+---
+- name: Set vim-nox as the default editor
+  alternatives:
+    name: editor
+    path: /usr/bin/vim.nox
+
+- name: Remove deprecated packages
+  apt:
+    name: "{{deprecated_packages}}"
+    state: absent

@@ -1,0 +1,34 @@
+---
+- import_tasks: apt.yaml
+
+- name: Setup tuned
+  shell: "/usr/sbin/tuned-adm profile {{ tuned_profile }}"
+  when: ansible_local.tuned.active != tuned_profile
+
+- name: Set Timezone
+  timezone:
+    name: "{{ timezone }}"
+
+- name: disable pcspkr
+  copy:
+    dest: /etc/modprobe.d/blacklist-modules.conf
+    content:
+      blacklist pcspkr
+    mode: 0644
+
+- name: Setting systemd-timesyncd
+  template:
+    src: "timesyncd.conf.j2"
+    dest: /etc/systemd/timesyncd.conf
+    mode: "0664"
+    owner: root
+    group: root
+  notify: Restart systemd-timesyncd
+
+- name: Enable fstrim
+  service:
+    name: fstrim.timer
+    enabled: true
+
+- import_tasks: mount.yaml
+- import_tasks: vim.yaml

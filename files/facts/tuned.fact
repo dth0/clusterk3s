@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+declare -a MODE
+MODE="default"
+
+CMD="/usr/sbin/tuned-adm"
+
+[ -f "$CMD" ] && {
+  MODE=$($CMD active | awk '{print $NF}')
+}
+
+echo "{\"active\" : \"${MODE}\"}"
+
+exit 0
+

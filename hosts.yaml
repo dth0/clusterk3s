@@ -16,17 +16,14 @@ all:
           k3s_master: true
 
   vars:
-    ansible_user: pi
-    # clusterk8s
-    default_pass: $6$Zg9NfX4w2/l8Y9eC$chvre2XPNx.kt7UkNc0EKW0GdU3RkAQJoX6wH0iqFdEeG/yDED4VT4.vhURPdEEt0.xYQfY0rUvWSGnMTMziv/
+    ansible_user: dtheodoro
     tuned_profile: throughput-performance
-    debian_release: bullseye
     timezone: Europe/Amsterdam
     ntp_server: time.cloudflare.com
     home: "/home/{{ ansible_user }}"
     domain: theodoro.local
-    k3s_version: v1.24.4+k3s1
+    k3s_version: v1.25.0+k3s1
     master_ip: 192.168.1.1
     extra_server_args: "--disable servicelb"
     extra_agent_args: ""
-    upgrade: true
+    upgrade: false

@@ -13,18 +13,15 @@
     state: present
     reload: yes
 
-- name: Activating cgroup support
-  copy:
-    dest: /etc/default/raspi-extra-cmdline
-    content:
-      cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory
-    mode: 0644
-
-- name: Create cmdline.txt symlink
-  file:
-    src: /boot/firmware/cmdline.txt
-    dest: /boot/cmdline.txt
-    state: link
+# thanks to geerlingguy
+- name: Ensure cgroup is enabled
+  ansible.builtin.replace:
+    path: /boot/cmdline.txt
+    regexp: '^([\w](?!.*\b{{ item }}\b).*)$'
+    replace: '\1 {{ item }}'
+  with_items:
+    - "cgroup_memory=1"
+    - "cgroup_enable=memory"
 
 - name: Changing to iptables-legacy
   alternatives:

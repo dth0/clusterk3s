@@ -37,20 +37,13 @@
     path: /var/lib/rancher/k3s/server
     mode: "{{ p.stat.mode }}"
 
-- name: Create directory .kube
-  file:
-    path: ~{{ ansible_user }}/.kube
-    state: directory
-    owner: "{{ ansible_user }}"
-    mode: "u=rwx,g=rx,o="
-
-- name: Copy config file to user home directory
+- name: Create directory env file
   copy:
-    src: /etc/rancher/k3s/k3s.yaml
-    dest: ~{{ ansible_user }}/.kube/config
-    remote_src: yes
-    owner: "{{ ansible_user }}"
-    mode: "u=rw,g=,o="
+    content: "K3S_DATASTORE_ENDPOINT='{{ lookup('ansible.builtin.env', 'K3S_DATASTORE_ENDPOINT') }}'"
+    dest: /etc/systemd/k3s.env
+    owner: root
+    group: root
+    mode: 0400
 
 - name: Create kubectl symlink
   file:

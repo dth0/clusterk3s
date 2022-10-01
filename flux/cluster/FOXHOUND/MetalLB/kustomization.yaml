@@ -5,3 +5,7 @@ namespace: metallb-system
 
 bases:
 - ../../../modules/MetalLB
+
+resources:
+  - ipaddresspool.yaml
+

@@ -1,4 +1,23 @@
 ---
+- name: Install Log2ram
+  block:
+    - name: Install Log2ram Repo
+      apt_repository:
+        repo: "{{item}}"
+        state: present
+      with_items:
+        - "deb http://packages.azlux.fr/debian/ {{debian_release}} main"
+    - name: install Log2ram package
+      apt:
+        name: "log2ram"
+        state: present
+        cache_valid_time: 3600
+    - name: Configure Log2ram
+      copy:
+        src: "log2ram.conf"
+        dest: "/etc/log2ram.conf"
+        mode: "0644"
+
 - meta: flush_handlers
 - name: Check provisioned file
   stat:

@@ -5,7 +5,6 @@ After=network-online.target
 
 [Service]
 Type=notify
-EnvironmentFile=/etc/systemd/k3s.env
 ExecStartPre=-/sbin/modprobe br_netfilter
 ExecStartPre=-/sbin/modprobe overlay
 ExecStart=/usr/local/bin/k3s server {{ extra_server_args | default("") }}

@@ -7,3 +7,4 @@
 
 - import_tasks: nodes.yaml
   when: k3s_master is not defined or k3s_master == False
+

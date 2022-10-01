@@ -37,14 +37,6 @@
     path: /var/lib/rancher/k3s/server
     mode: "{{ p.stat.mode }}"
 
-- name: Create directory env file
-  copy:
-    content: "K3S_DATASTORE_ENDPOINT='{{ lookup('ansible.builtin.env', 'K3S_DATASTORE_ENDPOINT') }}'"
-    dest: /etc/systemd/k3s.env
-    owner: root
-    group: root
-    mode: 0400
-
 - name: Create kubectl symlink
   file:
     src: /usr/local/bin/k3s

@@ -23,7 +23,7 @@ all:
     ntp_server: time.cloudflare.com
     home: "/home/{{ ansible_user }}"
     domain: theodoro.local
-    k3s_version: v1.25.0+k3s1
+    k3s_version: v1.26.1+k3s1
     master_ip: 192.168.1.1
     extra_server_args: "--disable servicelb"
     extra_agent_args: ""
